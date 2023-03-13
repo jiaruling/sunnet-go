@@ -9,7 +9,7 @@ import (
 
 type ServiceMethods interface {
 	// 回调函数(编写服务逻辑)
-	OnInit()
+	onInit()
 	OnMsg(msg Message)
 	OnExit()
 	// 插入消息
@@ -83,6 +83,7 @@ func (s *Service) OnExit() {
 	s.IsExiting = true
 	// 关闭管道
 	close(s.MsgQueue)
+	// 关闭协程
 	s.cancel()
 }
 

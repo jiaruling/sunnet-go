@@ -12,13 +12,13 @@ var Inst = NewSunnet(10)
 
 type SunnetMethods interface {
 	Start()
-	NewService(types string, msgLen int) uint16      // 增加服务
-	KillService(id uint16)               // 删除服务，仅限服务自己调用
-	getService(id uint16) (srv *Service) // 获取服务
-	Send(toId uint16, msg Message)       // 发送消息
-	AddConn(types ConnType, fd int32, serviceId uint16)   // 增加连接
-	GetConn(fd int32) (conn *Conn)                        // 获取连接
-	RemoveConn(fd int32)                         // 删除连接
+	NewService(types string, msgLen int) uint16         // 增加服务
+	KillService(id uint16)                              // 删除服务，仅限服务自己调用
+	getService(id uint16) (srv *Service)                // 获取服务
+	Send(toId uint16, msg Message)                      // 发送消息
+	AddConn(types ConnType, fd int32, serviceId uint16) // 增加连接
+	GetConn(fd int32) (conn *Conn)                      // 获取连接
+	RemoveConn(fd int32)                                // 删除连接
 	Listen(ipAddr string, port, serviceId uint16)
 	CloseConn(fd int32)
 }
@@ -27,7 +27,7 @@ type Sunnet struct {
 	Services     map[uint16]*Service // 服务列表
 	ServiceId    uint16              // 最大id值
 	ServicesLock sync.RWMutex        // 读写锁
-	Conns        map[int32]*Conn    // 连接列表
+	Conns        map[int32]*Conn     // 连接列表
 	ConnsLock    sync.RWMutex        // 读写锁
 }
 
@@ -64,7 +64,6 @@ func (s *Sunnet) KillService(id uint16) {
 	}
 	// 退出前
 	srv.OnExit()
-	srv.IsExiting = true
 	// 删除服务
 	s.ServicesLock.Lock()
 	{
